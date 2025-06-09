@@ -1,7 +1,21 @@
+"use client";
+
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
+  const router = useRouter();
+
+  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("searchTerm", e.target.value);
+
+    const searchQuery = urlParams.toString();
+    router.push(`/search?${searchQuery}`)
+  }
+
   return (
     <nav className="px-4 md:px-12 py-4 md:py-6 bg-white text-balck">
       <div className="flex justify-between items-center">
@@ -10,7 +24,12 @@ export const Navbar = () => {
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <Search className="w-4 h-4 flex"/>
           </div>
-          <input className="h-[36px] relative pl-10 border-[1px] border-black/[0.7] text-sm rounded-[8px] w-full py-2 px-3 focus:outline-none bg-transparent" type="text" placeholder="Search" />
+          <input 
+            className="h-[36px] relative pl-10 border-[1px] border-black/[0.7] text-sm rounded-[8px] w-full py-2 px-3 focus:outline-none bg-transparent" 
+            type="text" 
+            placeholder="Search" 
+            onChange={handleChange}
+          />
         </div>
 
         <Link href="/add-product">
