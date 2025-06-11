@@ -6,11 +6,11 @@ export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const searchParams = request.nextUrl.searchParams
+    const searchParams = request.nextUrl.searchParams;
     const searchTerm = searchParams.get("searchTerm");
 
     const products = await Product.find({
-      name: {$reqex: searchParams, $options: "i"} 
+      name: {$regex: searchTerm, $options: "i"} 
     }).sort({createdAt: -1});
 
     return Response.json({products}, {status: 200})
