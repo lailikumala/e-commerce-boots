@@ -28,7 +28,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
       console.log("Axios error:", error.message);
       console.log("Full error:", error);
     });
-  },[]);
+  },[productId]);
 
   useEffect(() => {
     if(product) {
@@ -103,7 +103,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
       </div>
 
       <div className='flex flex-col w-full'>
-        <label>Seller's Link: </label>
+        <label>Seller&apos;s Link: </label>
         <input
           type='text'
           name='link'

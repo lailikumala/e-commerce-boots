@@ -16,8 +16,8 @@ export async function GET(
     } 
 
     return Response.json({products}, {status: 200})
-  } catch (error: any) {
-    return Response.json({message: error.message}, {status: 400})
+  } catch (error) {
+      return Response.json({message: (error as Error).message}, {status: 400})  
   }
 }
 
@@ -48,8 +48,8 @@ export async function DELETE(
 
     await Product.findByIdAndDelete(productId);
     return Response.json({message: "Product deleted successfully"}, {status: 200})
-  } catch (error: any) {
-    return Response.json({message: error.message}, {status: 400})
+  } catch (error) {
+    return Response.json({message: (error as Error).message}, {status: 400})
   }
 }
 

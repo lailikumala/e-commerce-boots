@@ -39,7 +39,7 @@ const ProductPage = () => {
       console.log("Axios error:", error.message);
       console.log("Full error:", error);
     });
-  },[])
+  },[params.productId])
 
   if(!product) {
     return <p>Loading...</p>
