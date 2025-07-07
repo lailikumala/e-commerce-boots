@@ -2,18 +2,23 @@
 
 import Link from "next/link";
 import { Search } from "lucide-react";
-import { ChangeEvent } from "react";
+import { useState, KeyboardEvent  } from "react";
 import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
   const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    urlParams.set("searchTerm", e.target.value);
+    urlParams.set("searchTerm", searchTerm);
 
     const searchQuery = urlParams.toString();
     router.push(`/search?${searchQuery}`)
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if(e.key === 'Enter') handleSearch();
   }
 
   return (
@@ -28,7 +33,8 @@ export const Navbar = () => {
             className="h-[36px] relative pl-10 border-[1px] border-black/[0.7] text-sm rounded-[8px] w-full py-2 px-3 focus:outline-none bg-transparent" 
             type="text" 
             placeholder="Search" 
-            onChange={handleChange}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
         </div>
 

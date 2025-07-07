@@ -1,6 +1,7 @@
 "use client"
 
 import ProductList from '@/components/ProductList';
+import { numberWithCommas } from '@/lib/utils';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,7 +13,7 @@ interface IProduct {
   image: string;
   _id: string;
   name: string;
-  price: string;
+  price: number;
   link: string;
   description: string;
 }
@@ -32,6 +33,22 @@ const ProductPage = () => {
   }
 
   useEffect(() => {
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js"
+    const clientKey = process.env.NEXT_PUBLIC_CLIENT as string
+    const script = document.createElement('script')
+    script.src = snapScript
+    script.setAttribute('data-client-key', clientKey)
+    script.async = true
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    }
+
+  },[])
+
+  useEffect(() => {
     axios
     .get(`/api/products/${params.productId}`)
     .then((response) => setProduct(response.data.products))
@@ -42,7 +59,29 @@ const ProductPage = () => {
   },[params.productId])
 
   if(!product) {
-    return <p>Loading...</p>
+    return <p className='flex items-center justify-center font-bold'>Loading...</p>
+  }
+
+  const checkout = async () => {
+    const data = {
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      quantity: 1
+    }
+
+    await fetch(`/api/payment`, {
+      method: "POST",
+      body:JSON.stringify(data)
+    }).then(async (value) => {
+        const result = await value.json();
+        if(result?.status == 200) {
+          window.snap.pay(result.token);
+        } else {
+          toast.error('Failed Transaction')
+        }
+      
+    }).catch((error) => console.log('llll', error))
   }
 
   return (
@@ -85,13 +124,13 @@ const ProductPage = () => {
             </div>
           </div>
 
-          <h3 className="text-3xl font-semibold mt-3">${product.price}</h3>
+          <h3 className="text-3xl font-semibold mt-3">Rp{numberWithCommas(product.price)}</h3>
 
-          <Link href={product.link} target='_blank'>
-              <button className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold'>
-                Contact Seller
+          {/* <Link href={product.link} target='_blank'> */}
+              <button onClick={checkout} className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold'>
+                Checkout
               </button>
-          </Link>
+          {/* </Link> */}
 
           <p className="font-semibold mt-10 text-lg">Description</p>
           <p className="mt-1">{product.description}</p>

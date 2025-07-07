@@ -1,5 +1,6 @@
 "use client"
 
+import { numberWithCommas } from '@/lib/utils';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,7 +25,7 @@ const SearchComponent = () => {
       .get(`/api/search?searchTerm=${searchTermFromUrl}`)
       .then((response) => setProducts(response.data.products))
       .catch((error) => console.log("Error fetching serach result:", error))
-    }
+  }
   },[searchParams]);
 
 
@@ -37,7 +38,7 @@ const SearchComponent = () => {
             <Image src={product.image} alt="dummy-img" width={1000} height={1000} className='max-w-[17rem] h-72 object-cover object-center rounded-lg'/>
             <div className='mt-4'>
               <h2 className='font-semibold text-lg'>{product.name}</h2>
-              <p className='font-medium text-sm mt-1'>{`$${product.price}`}</p>
+              <p className='font-medium text-sm mt-1'>{`Rp${numberWithCommas(product.price)}`}</p>
             </div>
           </Link>
         ))}
