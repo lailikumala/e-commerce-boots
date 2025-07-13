@@ -3,6 +3,8 @@
 import ProductList from '@/components/ProductList';
 import { numberWithCommas } from '@/lib/utils';
 import axios from 'axios';
+import { Loader } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -19,6 +21,7 @@ interface IProduct {
 }
 
 const ProductPage = () => {
+  const { data: session, } = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const params = useParams();
@@ -53,13 +56,14 @@ const ProductPage = () => {
     .get(`/api/products/${params.productId}`)
     .then((response) => setProduct(response.data.products))
     .catch((error) => {
-      console.log("Axios error:", error.message);
-      console.log("Full error:", error);
+      console.log("error:", error.message);
     });
   },[params.productId])
 
   if(!product) {
-    return <p className='flex items-center justify-center font-bold'>Loading...</p>
+    return <div className='flex justify-center items-center'>
+      <Loader className='size-6 mr-4 mt-4 animate-spin' />
+    </div>
   }
 
   const checkout = async () => {
@@ -100,6 +104,7 @@ const ProductPage = () => {
         />
 
         <div className="basic-1/2 py-8">
+        {session?.user?.role == 'admin' && (
           <div className="flex justify-between items-center">
             <h2 className="text-2xl">{product.name}</h2>
 
@@ -123,6 +128,7 @@ const ProductPage = () => {
               )}
             </div>
           </div>
+        )}
 
           <h3 className="text-3xl font-semibold mt-3">Rp{numberWithCommas(product.price)}</h3>
 

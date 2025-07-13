@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useState } from 'react'
 import toast from 'react-hot-toast';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 
 const AddForm = () => {
   const router = useRouter();
@@ -56,7 +58,7 @@ const AddForm = () => {
 
       <div className='flex flex-col w-full'>
         <label>Name: </label>
-        <input
+        <Input
           type='text'
           name='name'
           placeholder='Enter the product name'
@@ -66,7 +68,7 @@ const AddForm = () => {
 
       <div className='flex flex-col w-full'>
         <label>Price: </label>
-        <input
+        <Input
           type='number'
           name='price'
           placeholder='Enter the product price'
@@ -76,7 +78,7 @@ const AddForm = () => {
 
       <div className='flex flex-col w-full'>
         <label>Seller&apos;s Link: </label>
-        <input
+        <Input
           type='text'
           name='link'
           placeholder='Link to where buyers can find you'
@@ -95,9 +97,9 @@ const AddForm = () => {
         </textarea>
       </div>
 
-      <button type='submit' className='w-full bg-[#212529] text-white px-3 py-2 rounded-md cursor-pointer'>
+      <Button type='submit' className='w-full bg-[#212529] text-white px-3 py-2 rounded-md cursor-pointer'>
         Add Product
-      </button>
+      </Button>
     </form>
   )
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import { useState, KeyboardEvent  } from "react";
 import { useRouter } from "next/navigation";
+import UserButton from "./user-button";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -37,10 +38,7 @@ export const Navbar = () => {
             onKeyDown={handleKeyDown}
           />
         </div>
-
-        <Link href="/add-product">
-          <button className="bg-[#212529] text-white px-3 py-2 rounded-md cursor-pointer">Add Product</button>
-        </Link>
+        <UserButton/>
       </div>
     </nav>
   )
