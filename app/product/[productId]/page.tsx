@@ -1,7 +1,10 @@
 "use client"
 
 import ProductList from '@/components/ProductList';
+import { numberWithCommas } from '@/lib/utils';
 import axios from 'axios';
+import { Loader } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -12,12 +15,13 @@ interface IProduct {
   image: string;
   _id: string;
   name: string;
-  price: string;
+  price: number;
   link: string;
   description: string;
 }
 
 const ProductPage = () => {
+  const { data: session, } = useSession();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const params = useParams();
@@ -32,17 +36,56 @@ const ProductPage = () => {
   }
 
   useEffect(() => {
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js"
+    const clientKey = process.env.NEXT_PUBLIC_CLIENT as string
+    const script = document.createElement('script')
+    script.src = snapScript
+    script.setAttribute('data-client-key', clientKey)
+    script.async = true
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    }
+
+  },[])
+
+  useEffect(() => {
     axios
     .get(`/api/products/${params.productId}`)
     .then((response) => setProduct(response.data.products))
     .catch((error) => {
-      console.log("Axios error:", error.message);
-      console.log("Full error:", error);
+      console.log("error:", error.message);
     });
   },[params.productId])
 
   if(!product) {
-    return <p>Loading...</p>
+    return <div className='flex justify-center items-center'>
+      <Loader className='size-6 mr-4 mt-4 animate-spin' />
+    </div>
+  }
+
+  const checkout = async () => {
+    const data = {
+      _id: product._id,
+      name: product.name,
+      price: product.price,
+      quantity: 1
+    }
+
+    await fetch(`/api/payment`, {
+      method: "POST",
+      body:JSON.stringify(data)
+    }).then(async (value) => {
+        const result = await value.json();
+        if(result?.status == 200) {
+          window.snap.pay(result.token);
+        } else {
+          toast.error('Failed Transaction')
+        }
+      
+    }).catch((error) => console.log('llll', error))
   }
 
   return (
@@ -61,6 +104,7 @@ const ProductPage = () => {
         />
 
         <div className="basic-1/2 py-8">
+        {session?.user?.role == 'admin' && (
           <div className="flex justify-between items-center">
             <h2 className="text-2xl">{product.name}</h2>
 
@@ -84,14 +128,15 @@ const ProductPage = () => {
               )}
             </div>
           </div>
+        )}
 
-          <h3 className="text-3xl font-semibold mt-3">${product.price}</h3>
+          <h3 className="text-3xl font-semibold mt-3">Rp{numberWithCommas(product.price)}</h3>
 
-          <Link href={product.link} target='_blank'>
-              <button className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold'>
-                Contact Seller
+          {/* <Link href={product.link} target='_blank'> */}
+              <button onClick={checkout} className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold'>
+                Checkout
               </button>
-          </Link>
+          {/* </Link> */}
 
           <p className="font-semibold mt-10 text-lg">Description</p>
           <p className="mt-1">{product.description}</p>

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
 
 interface IProduct {
   image: string;
@@ -71,7 +73,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
       {imageURL&& (<Image src={imageURL} alt='imageURL' width={1000} height={1000} className='max-w-full max-h-72 object-cover object-center rounded-lg'/>)}
       <div className='flex flex-col w-full'>
         <label>Product Image: </label>
-        <input
+        <Input
           type='file'
           accept='image/*'
           name='image'
@@ -82,7 +84,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
 
       <div className='flex flex-col w-full'>
         <label>Name: </label>
-        <input
+        <Input
           type='text'
           name='name'
           defaultValue={product?.name}
@@ -93,7 +95,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
 
       <div className='flex flex-col w-full'>
         <label>Price: </label>
-        <input
+        <Input
           type='number'
           name='price'
           defaultValue={product?.price}
@@ -104,7 +106,7 @@ const UpdateForm = ({productId}: {productId: string}) => {
 
       <div className='flex flex-col w-full'>
         <label>Seller&apos;s Link: </label>
-        <input
+        <Input
           type='text'
           name='link'
           defaultValue={product?.link}
@@ -125,9 +127,9 @@ const UpdateForm = ({productId}: {productId: string}) => {
         </textarea>
       </div>
 
-      <button type='submit' className='w-full bg-[#212529] text-white px-3 py-2 rounded-md cursor-pointer'>
+      <Button type='submit' className='w-full bg-[#212529] text-white px-3 py-2 rounded-md cursor-pointer'>
         Update Product
-      </button>
+      </Button>
     </form>
   )
 }
