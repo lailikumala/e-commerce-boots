@@ -1,6 +1,7 @@
 "use client"
 
 import { numberWithCommas } from '@/lib/utils';
+import { IProduct } from '@/types/type';
 import axios from 'axios';
 import { Loader } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -8,13 +9,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation'
 import React, { Suspense, useEffect, useState } from 'react'
-
-interface IProduct {
-  _id: string;
-  image: string;
-  name: string;
-  price: number;
-}
 
 const SearchComponent = () => {
   const [products, setProducts] = useState([]);
