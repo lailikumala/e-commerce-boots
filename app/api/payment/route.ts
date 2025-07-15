@@ -23,8 +23,8 @@ interface ITransactionError {
 
 
 export async function POST(request: Request) {
-    const { _id, name, price, quantity } = await request.json();
-
+    const { _id, name, price, quantity, shippingAddress} = await request.json();
+    
     const parameter = {
       item_details: {
         name,
@@ -34,6 +34,20 @@ export async function POST(request: Request) {
       transaction_details: {
         order_id: `ORDER-${Date.now()}-${_id}`,
         gross_amount: price * quantity
+      },
+      customer_details: {
+        first_name: shippingAddress.firstName,
+        last_name: shippingAddress.lastName,
+        email: shippingAddress.email,
+        shipping_address: {
+        first_name: shippingAddress.firstName,
+        last_name: shippingAddress.lastName,
+        email: shippingAddress.email,
+        address: shippingAddress.address,
+        city: shippingAddress.city,
+        postal_code: shippingAddress.zipCode,
+        country_code: "IDN"
+        }
       }
     } 
 

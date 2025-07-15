@@ -2,6 +2,7 @@
 
 import ProductList from '@/components/ProductList';
 import { numberWithCommas } from '@/lib/utils';
+import { IProduct } from '@/types/type';
 import axios from 'axios';
 import { Loader } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -10,15 +11,6 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
-
-interface IProduct {
-  image: string;
-  _id: string;
-  name: string;
-  price: number;
-  link: string;
-  description: string;
-}
 
 const ProductPage = () => {
   const { data: session, } = useSession();
@@ -66,28 +58,6 @@ const ProductPage = () => {
     </div>
   }
 
-  const checkout = async () => {
-    const data = {
-      _id: product._id,
-      name: product.name,
-      price: product.price,
-      quantity: 1
-    }
-
-    await fetch(`/api/payment`, {
-      method: "POST",
-      body:JSON.stringify(data)
-    }).then(async (value) => {
-        const result = await value.json();
-        if(result?.status == 200) {
-          window.snap.pay(result.token);
-        } else {
-          toast.error('Failed Transaction')
-        }
-      
-    }).catch((error) => console.log('llll', error))
-  }
-
   return (
     <div className='px-4 md:px-12 bg-[#F8F9FA]'>
       <p className="cursor-pointer py-3" onClick={() => router.back()}>
@@ -132,11 +102,11 @@ const ProductPage = () => {
 
           <h3 className="text-3xl font-semibold mt-3">Rp{numberWithCommas(product.price)}</h3>
 
-          {/* <Link href={product.link} target='_blank'> */}
-              <button onClick={checkout} className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold'>
+          <Link href={`/product/${product._id}/checkout`}>
+              <button className='mt-8 bg-[#212529] hover:bg-[#343A40] text-white px-3 py-2 w-full font-semibold cursor-pointer'>
                 Checkout
               </button>
-          {/* </Link> */}
+          </Link>
 
           <p className="font-semibold mt-10 text-lg">Description</p>
           <p className="mt-1">{product.description}</p>
