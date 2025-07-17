@@ -15,3 +15,11 @@ export interface IFormData {
   city: string;
   zipCode: string;
 }
+
+export interface ITransaction {
+  order_id: string;
+  transaction_date: string;
+  status: string;
+  amount: number;
+  payment_type: string;
+}
