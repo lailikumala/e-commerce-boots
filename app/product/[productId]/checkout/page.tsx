@@ -17,7 +17,7 @@ const CheckoutPage = () => {
     city: '',
     zipCode: '',
   })
-  
+
   return (
     <main className="flex-1 py-12 px-6 md:px-12 lg:px-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
