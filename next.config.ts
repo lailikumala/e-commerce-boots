@@ -8,7 +8,7 @@ const withPWA = require('next-pwa')({
   skipWaiting: true,
   runtimeCaching: [
     {
-      urlPattern: /\/api\/.*/, // cahce all API
+      urlPattern: /\/api\/.*/, // cache all API
       handler: 'NetworkFirst',
       options: {
         cacheName: 'api-cache',
@@ -53,8 +53,16 @@ const nextConfig: NextConfig = {
   // Fitur baru Next.js 15
   experimental: {
     optimizePackageImports: ['next-pwa']
+  },
+  async redirects() {
+    return [
+      {
+        source: '/finish',
+        destination: '/transaction/finish', 
+        permanent: false, 
+      }
+    ]
   }
 };
 
 module.exports = withPWA(nextConfig);
-
