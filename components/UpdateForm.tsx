@@ -8,15 +8,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-
-interface IProduct {
-  image: string;
-  _id: string;
-  name: string;
-  price: string;
-  link: string;
-  description: string;
-}
+import { IProduct } from '@/types/type';
 
 const UpdateForm = ({productId}: {productId: string}) => {
   const router = useRouter();

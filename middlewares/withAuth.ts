@@ -5,7 +5,7 @@ const onlyAdminPagePatterns = [
   /^\/add-product$/,
   /^\/product\/[^\/]+\/update$/, // `/product/{id}/update`
 ];
-const authPage = ['/sign-in', '/sign-up'];
+const authPage = ['/sign-in', '/sign-up', '/finish'];
 
 function isAdminPage(pathname: string) {
   return onlyAdminPagePatterns.some((pattern) => pattern.test(pathname));

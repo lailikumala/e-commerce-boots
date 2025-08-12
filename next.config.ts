@@ -58,8 +58,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/finish',
-        destination: '/transaction/finish', // pindah ke halaman aslinya
-        permanent: false, // pakai false biar bisa bawa query di client
+        destination: '/transaction/finish', 
+        permanent: false, 
       }
     ]
   }
