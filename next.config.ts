@@ -54,15 +54,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['next-pwa']
   },
-  async redirects() {
-    return [
-      {
-        source: '/finish',
-        destination: '/finish', 
-        permanent: false, 
-      }
-    ]
-  }
 };
 
 module.exports = withPWA(nextConfig);
