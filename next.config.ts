@@ -58,7 +58,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/finish',
-        destination: '/transaction/finish', 
+        destination: '/finish', 
         permanent: false, 
       }
     ]
